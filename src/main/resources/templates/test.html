@@ -1,0 +1,42 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>系统设置-广告设置</title>
+  <link rel="icon" href="data:;base64,=">
+  <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+  <script src="https://unpkg.com/qiniu-js@<version>/dist/qiniu.min.js"></script>
+
+  <script type="text/javascript">
+    // 页面加载的时候使用ajax获得上传凭证,并将它赋值给token标签
+    $(document).ready(function() {
+      $.ajax({
+        type:'POST',
+        url: "http://127.0.0.1:8080/getToken",
+        success: function(result) {
+          try {
+            console.log(result);
+            var tokenNode = document.getElementById("token");
+            tokenNode.value = result.token;
+            console.log("token:"+result.token);
+          } catch (e) {
+            //TODO handle the exception
+            console.log("还是错了");
+          }
+
+        }
+      })
+    });
+  </script>
+</head>
+<body>
+
+<form method="post" action="http://upload.qiniup.com/" enctype="multipart/form-data">
+  <input name="key" id="key" value="" type="hidden">
+  <input name="token" id="token" value="" type="hidden" >
+  <input name="file" id="file" type="file" />
+  <input type="submit" value="上传文件" />
+</form>
+
+</body>
+</html>
+
