@@ -77,6 +77,34 @@ public class QiniuService {
     return auth.uploadToken(bucketname);
   }
 
+  public String callBackToken(String key){
+    // 使用StringMap工具类拼装参数
+    StringMap putPolicy = new StringMap();
+
+    putPolicy.put("scope", bucketname);
+
+
+    putPolicy.put("deadline", (System.currentTimeMillis() / 1000L + 3600));
+
+    // type : String
+    putPolicy.put("returnBody",
+            "{\"key\": $(key), \"hash\": $(etag), \"w\": $(imageInfo.width), \"h\": $(imageInfo.height)}");
+
+    // type : String
+    putPolicy.put("callbackBody",
+            "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"w\":\"$(imageInfo.width)\",\"h\":\"$(imageInfo.height)\"}");
+
+    // type : String
+    putPolicy.put("callbackUrl",
+            "http://127.0.0.1:8080/callBack");
+
+    putPolicy.put("callbackBodyType", "application/json");
+
+    // 第三步： 生成一个上传凭证
+
+    return auth.uploadToken(bucketname, key, (System.currentTimeMillis() / 1000L + 3600), putPolicy);
+  }
+
   public static Map<String, String> getUploadToken(int bocket, String key) {
     Map<String, String> data = new HashMap<>();
 

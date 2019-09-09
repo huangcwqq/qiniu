@@ -35,12 +35,24 @@ public class QiniuController {
     return "fail";
   }
 
-  @RequestMapping(value = "/getToken", method = RequestMethod.POST)
+  @RequestMapping(value = "/getToken", method = RequestMethod.GET)
   @ResponseBody
   public Map<String, String> getUploadToken() {
     Map<String, String> data = new HashMap<>();
     // 将上传凭证放入map中
-    data.put("token",qiniuService.getUpToken());
+//    data.put("token",qiniuService.getUpToken());
+//    data.put("token",qiniuService.callBackToken("测试"));
+    data.put("token",qiniuService.getuplodTokenByKey("测试"));
+    return data;
+  }
+
+  @RequestMapping(value = "/callBack", method = RequestMethod.POST)
+  @ResponseBody
+  public Map<String, String> callBack(HttpServletRequest request) {
+    Map<String, String> data = new HashMap<>();
+    System.out.println(request.getHeader("s"));
+    System.out.println("回调成功");
+    data.put("info","回调成功");
     return data;
   }
 }
